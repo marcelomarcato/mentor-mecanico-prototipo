@@ -2,7 +2,6 @@
 <style>
   :root{
     --page:#e9ecec; --page-ink:#181b1e; --page-ink2:#5a636a; --page-line:#d3d8d7; --page-card:#f7f8f7;
-    /* app (device) brand — committed dark diagnostic identity */
     --bg:#0e1114; --bg2:#161b20; --bg3:#1e252b; --line:#2a323a; --line2:#3a444d;
     --ink:#eef2f4; --ink2:#aab4bc; --ink3:#727d85;
     --amber:#f2a531; --amber-soft:#33260f;
@@ -26,8 +25,7 @@
     border:1px dashed var(--page-line);padding:7px 13px;border-radius:999px}
   .hint b{color:var(--amber)}
 
-  /* device */
-  .phone{width:390px;max-width:94vw;height:800px;max-height:86vh;background:var(--bg);border-radius:42px;
+  .phone{width:390px;max-width:94vw;height:812px;max-height:86vh;background:var(--bg);border-radius:42px;
     border:1px solid var(--line2);box-shadow:0 40px 80px -30px rgba(0,0,0,.6),0 0 0 11px #05070988;
     overflow:hidden;position:relative;display:flex;flex-direction:column}
   .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:26px;background:#05070a;
@@ -36,7 +34,6 @@
     font-family:var(--mono);font-size:12px;color:var(--ink2);flex:0 0 auto}
   .statusbar .r{display:flex;gap:6px;align-items:center}
 
-  /* screens */
   .screens{flex:1 1 auto;position:relative;overflow:hidden}
   .screen{position:absolute;inset:0;overflow-y:auto;padding:6px 18px 20px;display:none;flex-direction:column;gap:14px}
   .screen.active{display:flex;animation:fade .28s ease}
@@ -59,7 +56,8 @@
   .search svg{flex:0 0 auto}
   .search input{border:0;background:transparent;color:var(--ink);font-size:15px;width:100%;outline:none;font-family:var(--sans)}
   .search input::placeholder{color:var(--ink3)}
-  .search .mic{color:var(--amber)}
+  .search .mic{color:var(--amber);cursor:pointer}
+  .searchnote{font-size:11.5px;color:var(--ink3);margin:-8px 2px 0;font-style:italic}
 
   .label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:6px 2px -2px}
   .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -74,8 +72,10 @@
     display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto}
   .card .ct h3{margin:0;font-size:15px;color:var(--ink)}
   .card .ct .sub{font-size:12px;color:var(--ink3);font-family:var(--mono)}
+  .card.tap{cursor:pointer} .card.tap:hover{border-color:var(--amber)}
+  .card .ct .new{margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--amber);
+    border:1px solid var(--amber);border-radius:5px;padding:2px 6px;letter-spacing:.05em}
 
-  .readout{font-family:var(--mono);font-variant-numeric:tabular-nums}
   .metric{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg3);
     border:1px solid var(--line);border-radius:10px}
   .metric .k{font-size:13px;color:var(--ink2)}
@@ -83,8 +83,12 @@
   .rangebar{height:8px;border-radius:6px;background:linear-gradient(90deg,var(--fail) 0 18%,var(--pass) 18% 62%,var(--fail) 62% 100%);position:relative;margin:2px 0 0}
   .rangebar .needle{position:absolute;top:-4px;width:2px;height:16px;background:var(--ink);border-radius:2px}
   .rangelabels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--ink3)}
+  .how{font-size:13px;color:var(--ink2);background:var(--bg3);border-left:3px solid var(--steel);padding:9px 12px;border-radius:0 8px 8px 0}
+  .how b{color:var(--ink)}
+  .exp{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--ink2);
+    background:var(--bg3);border:1px solid var(--line);border-radius:9px;padding:8px 11px}
+  .exp .val{color:var(--amber);font-weight:700}
 
-  /* guided diagnosis */
   .gd-head{display:flex;align-items:center;gap:10px}
   .gd-head .back{cursor:pointer;color:var(--ink2);font-size:20px;line-height:1;background:var(--bg2);border:1px solid var(--line);
     width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center}
@@ -96,11 +100,6 @@
   .qcard{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
   .qcard .step-n{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.1em}
   .qcard .q{font-size:19px;font-weight:650;color:var(--ink);line-height:1.3;text-wrap:balance}
-  .qcard .how{font-size:13px;color:var(--ink2);background:var(--bg3);border-left:3px solid var(--steel);padding:9px 12px;border-radius:0 8px 8px 0}
-  .qcard .how b{color:var(--ink)}
-  .exp{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--ink2);
-    background:var(--bg3);border:1px solid var(--line);border-radius:9px;padding:8px 11px}
-  .exp .val{color:var(--amber);font-weight:700}
   .ans{display:flex;flex-direction:column;gap:9px}
   .btn{border:1px solid var(--line2);background:var(--bg3);color:var(--ink);padding:13px 15px;border-radius:11px;
     font-size:15px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:11px;transition:.15s;font-family:var(--sans)}
@@ -109,7 +108,6 @@
     align-items:center;justify-content:center;flex:0 0 auto}
   .btn.ok .mk{background:var(--pass-soft);color:var(--pass)}
   .btn.bad .mk{background:var(--fail-soft);color:var(--fail)}
-  .btn.neutral .mk{background:var(--bg2);color:var(--ink3)}
 
   .verdict{background:linear-gradient(180deg,var(--pass-soft),var(--bg2));border:1px solid var(--pass);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
   .verdict .tag{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--pass)}
@@ -126,7 +124,6 @@
   .a.primary{background:var(--amber);color:#1a1205;border:1px solid var(--amber)}
   .a.ghost{background:transparent;color:var(--ink);border:1px solid var(--line2)}
 
-  /* mentor chat */
   .msg{max-width:82%;padding:11px 13px;border-radius:14px;font-size:14px;line-height:1.4}
   .msg.them{align-self:flex-start;background:var(--bg2);border:1px solid var(--line);border-bottom-left-radius:5px;color:var(--ink)}
   .msg.me{align-self:flex-end;background:var(--amber-soft);border:1px solid var(--amber);border-bottom-right-radius:5px;color:var(--ink)}
@@ -144,27 +141,46 @@
   .post .foot{display:flex;gap:14px;font-size:12px;color:var(--ink2);font-family:var(--mono)}
   .post .foot b{color:var(--amber)}
 
-  /* bottom nav */
+  /* parts + exploded */
+  .partart{display:flex;gap:13px;align-items:center;background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .partart svg{flex:0 0 auto}
+  .partart .dims{display:flex;flex-direction:column;gap:5px}
+  .partart .dims .row{font-family:var(--mono);font-size:13px;color:var(--ink2)} .partart .dims .row b{color:var(--amber)}
+  .exploded{position:relative;background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;justify-content:center}
+  .rmlist{display:flex;flex-direction:column;gap:8px}
+  .rmitem{display:flex;gap:11px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+  .rmitem .o{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--amber);border:1px solid var(--amber);
+    border-radius:7px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .rmitem b{font-size:14px;color:var(--ink)} .rmitem span{font-size:12px;color:var(--ink3);display:block}
+  .rmitem.target{border-color:var(--amber);background:var(--amber-soft)}
+
   .nav{flex:0 0 auto;display:flex;background:var(--bg2);border-top:1px solid var(--line);padding:9px 8px 16px}
   .nav button{flex:1;background:none;border:0;color:var(--ink3);display:flex;flex-direction:column;align-items:center;gap:3px;
     font-size:10px;font-family:var(--sans);cursor:pointer;padding:4px 0}
   .nav button svg{width:22px;height:22px}
   .nav button.on{color:var(--amber)}
 
+  .toast{position:absolute;left:50%;bottom:86px;transform:translateX(-50%) translateY(10px);background:var(--amber);color:#1a1205;
+    font-size:13px;font-weight:600;padding:10px 15px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;max-width:80%;text-align:center;z-index:50}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
   .foot-note{max-width:640px;text-align:center;color:var(--page-ink2);font-size:13px;line-height:1.5}
   .foot-note code{font-family:var(--mono);font-size:12px;background:var(--page-card);border:1px solid var(--page-line);padding:2px 6px;border-radius:5px}
+  .whatsnew{max-width:640px;width:100%;background:var(--page-card);border:1px solid var(--page-line);border-radius:12px;padding:14px 18px;font-size:13.5px;color:var(--page-ink2)}
+  .whatsnew b{color:var(--page-ink)} .whatsnew .amb{color:var(--amber)}
 </style>
 
 <div class="head">
-  <div class="eyebrow">Protótipo navegável · MVP</div>
+  <div class="eyebrow">Protótipo navegável · v2 · feedback do mecânico</div>
   <h1>O mentor do mecânico — telas principais</h1>
-  <p>Mockup clicável. O <b>Diagnóstico Guiado</b> funciona de verdade: escolha um sintoma e percorra a árvore de decisão até a causa confirmada. Use a barra inferior para navegar entre as telas.</p>
-  <div class="hint">👆 Toque em <b>“Não pega”</b> na tela inicial para ver o mentor em ação</div>
+  <p>Mockup clicável, atualizado com o retorno do teste. O <b>Diagnóstico Guiado</b> funciona de verdade e agora vai mais fundo. Experimente também digitar um sintoma na busca (ex.: “perde aceleração”).</p>
+  <div class="hint">👆 Toque em <b>“Não pega”</b> ou <b>“Perde aceleração”</b> na tela inicial</div>
 </div>
 
 <div class="phone" role="application" aria-label="Protótipo do app">
   <div class="notch"></div>
   <div class="statusbar"><span>9:41</span><span class="r">oficina · 4G <span>▮▮▮</span></span></div>
+  <div class="toast" id="toast"></div>
 
   <div class="screens">
 
@@ -172,7 +188,7 @@
     <div class="screen active" id="s-inicio">
       <div class="apphead">
         <div class="brand"><span class="lamp"></span> MECÂNICO PRO</div>
-        <div class="readout" style="font-size:12px;color:var(--ink3)">nível: Bronze ▴</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--ink3)">nível: Bronze ▴</div>
       </div>
       <div class="veh">
         <span class="plate">PALIO</span>
@@ -181,28 +197,31 @@
       </div>
       <div class="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#727d85" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input placeholder="Peça, código, sintoma ou pergunta…" aria-label="busca">
-        <svg class="mic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg>
+        <input id="mainSearch" placeholder="Descreva o defeito com suas palavras…" aria-label="busca" onkeydown="if(event.key==='Enter')convSearch()">
+        <svg class="mic" onclick="convSearch()" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg>
       </div>
+      <div class="searchnote">Fale como você fala na oficina: “não pega”, “perde aceleração”, “falha em baixa”, “apaga quente”…</div>
 
       <div class="label">Diagnóstico por sintoma</div>
       <div class="chips">
-        <button class="chip warn" onclick="startGD()">🔑 Não pega</button>
-        <button class="chip" onclick="go('s-diag')">💨 Fumaça preta</button>
-        <button class="chip" onclick="go('s-diag')">📉 Falha em baixa</button>
-        <button class="chip" onclick="go('s-diag')">🌡️ Esquenta</button>
-        <button class="chip" onclick="go('s-diag')">⚙️ Trepida</button>
-        <button class="chip" onclick="go('s-diag')">🔧 Luz de injeção</button>
+        <button class="chip warn" onclick="startGD('naopega')">🔑 Não pega</button>
+        <button class="chip" onclick="startGD('aceleracao')">📉 Perde aceleração</button>
+        <button class="chip" onclick="toast('Montando o passo a passo de “falha em baixa”…')">🔧 Falha em baixa</button>
+        <button class="chip" onclick="toast('Montando o passo a passo de “esquenta”…')">🌡️ Esquenta</button>
+        <button class="chip" onclick="toast('Montando o passo a passo de “fumaça preta”…')">💨 Fumaça preta</button>
       </div>
 
-      <div class="label">Consulta rápida</div>
-      <div class="card" onclick="go('s-consulta')" style="cursor:pointer">
-        <div class="ct"><div class="ic">🔩</div><div><h3>Torque & sincronismo</h3><div class="sub">cabeçote · roda · correia</div></div></div>
+      <div class="label">Ferramentas</div>
+      <div class="card tap" onclick="go('s-consulta')">
+        <div class="ct"><div class="ic">📊</div><div><h3>Consulta rápida</h3><div class="sub">torque · faixa de sensor · sincronismo</div></div></div>
       </div>
-      <div class="card" onclick="go('s-consulta')" style="cursor:pointer">
-        <div class="ct"><div class="ic">📊</div><div><h3>Faixa de trabalho do sensor</h3><div class="sub">MAP · MAF · TPS · lambda</div></div></div>
+      <div class="card tap" onclick="go('s-pecas')">
+        <div class="ct"><div class="ic">🔍</div><div><h3>Consulta de peças</h3><div class="sub">medida · numeração · foto</div></div><span class="new">NOVO</span></div>
       </div>
-      <div class="card" onclick="go('s-mentor')" style="cursor:pointer">
+      <div class="card tap" onclick="go('s-explodida')">
+        <div class="ct"><div class="ic">🧩</div><div><h3>Vista explodida</h3><div class="sub">o que tirar para acessar a peça</div></div><span class="new">NOVO</span></div>
+      </div>
+      <div class="card tap" onclick="go('s-mentor')">
         <div class="ct"><div class="ic">🎧</div><div><h3>Falar com um mentor</h3><div class="sub">técnico sênior · resposta rápida</div></div></div>
       </div>
     </div>
@@ -211,7 +230,7 @@
     <div class="screen" id="s-diag">
       <div class="gd-head">
         <div class="back" onclick="go('s-inicio')" role="button" aria-label="voltar">‹</div>
-        <div><h2>Diagnóstico Guiado</h2><div class="sym" id="gd-sym">Palio 1.0 Fire · “não pega”</div></div>
+        <div><h2>Diagnóstico Guiado</h2><div class="sym" id="gd-sym"></div></div>
       </div>
       <div class="progress" id="gd-prog"></div>
       <div id="gd-body"></div>
@@ -219,7 +238,7 @@
 
     <!-- ===== CONSULTA ===== -->
     <div class="screen" id="s-consulta">
-      <div class="apphead"><div class="brand"><span class="lamp"></span> CONSULTA</div></div>
+      <div class="gd-head"><div class="back" onclick="go('s-inicio')">‹</div><div><h2>Consulta rápida</h2><div class="sym">Palio 1.0 Fire</div></div></div>
       <div class="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#727d85" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input value="sensor MAP" aria-label="busca">
@@ -229,9 +248,7 @@
         <div class="metric"><span class="k">Sua leitura (scanner)</span><span class="v">600 mbar</span></div>
         <div class="rangebar"><span class="needle" style="left:92%"></span></div>
         <div class="rangelabels"><span>300</span><span>faixa OK 300–500</span><span>700</span></div>
-        <div class="how" style="font-size:13px;color:var(--ink2);background:var(--fail-soft);border-left:3px solid var(--fail);padding:9px 12px;border-radius:0 8px 8px 0">
-          <b style="color:var(--fail)">600 está ALTO.</b> Indica muita entrada de ar (vácuo baixo). Verifique: mangueira de vácuo, corpo de borboleta, junta do coletor.
-        </div>
+        <div class="how" style="background:var(--fail-soft);border-left-color:var(--fail)"><b style="color:var(--fail)">600 está ALTO.</b> Indica muita entrada de ar (vácuo baixo). Verifique: mangueira de vácuo, corpo de borboleta, junta do coletor.</div>
       </div>
       <div class="card">
         <div class="ct"><div class="ic">🔩</div><div><h3>Torque — parafuso do cabeçote</h3><div class="sub">motor Fire 1.0 8V</div></div></div>
@@ -241,9 +258,63 @@
       </div>
     </div>
 
+    <!-- ===== CONSULTA DE PEÇAS (novo) ===== -->
+    <div class="screen" id="s-pecas">
+      <div class="gd-head"><div class="back" onclick="go('s-inicio')">‹</div><div><h2>Consulta de peças</h2><div class="sym">medida · numeração · foto</div></div></div>
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#727d85" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input value="retentor comando Fiat Toro 2.0" aria-label="busca">
+      </div>
+      <div class="card">
+        <div class="ct"><div class="ic">⭕</div><div><h3>Retentor do comando — Toro 2.0</h3><div class="sub">a peça saiu danificada? aqui está a medida</div></div></div>
+        <div class="partart">
+          <svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" fill="none" stroke="#5c7d9c" stroke-width="3"/><circle cx="36" cy="36" r="19" fill="none" stroke="#f2a531" stroke-width="6"/><circle cx="36" cy="36" r="12" fill="none" stroke="#5c7d9c" stroke-width="3"/></svg>
+          <div class="dims">
+            <div class="row">Ø interno&nbsp; <b>38 mm</b></div>
+            <div class="row">Ø externo <b>52 mm</b></div>
+            <div class="row">Largura&nbsp;&nbsp; <b>7 mm</b></div>
+            <div class="row">Código&nbsp;&nbsp;&nbsp; <b>55214536</b></div>
+          </div>
+        </div>
+        <div class="how">Medida <b>38 × 52 × 7 mm</b>. Leve este código na autopeça — evita comprar o retentor errado.</div>
+      </div>
+      <div class="card">
+        <div class="ct"><div class="ic">🌡️</div><div><h3>Sonda lambda — Passat TSI</h3><div class="sub">numeração correta</div></div></div>
+        <div class="exp"><span>Pré-catalisador (banco 1)</span><span class="val">06J 906 262</span></div>
+        <div class="exp"><span>Conector</span><span class="val">5 vias · retangular</span></div>
+        <div class="how">Confira o número gravado na sua antes de comprar — há versão banda larga e comum.</div>
+      </div>
+      <div class="searchnote">Dados ilustrativos. A ideia: consultar medida/nº com foto — útil para o mecânico e para a autopeça.</div>
+    </div>
+
+    <!-- ===== VISTA EXPLODIDA (novo) ===== -->
+    <div class="screen" id="s-explodida">
+      <div class="gd-head"><div class="back" onclick="go('s-inicio')">‹</div><div><h2>Vista explodida</h2><div class="sym">Alternador · Ford Ka 1.0</div></div></div>
+      <div class="how"><b>O que você quer remover?</b> Alternador. Veja abaixo o que precisa sair antes — e a ordem.</div>
+      <div class="exploded">
+        <svg width="240" height="150" viewBox="0 0 240 150" fill="none">
+          <rect x="8" y="10" width="224" height="130" rx="10" stroke="#2a323a"/>
+          <!-- compressor -->
+          <circle cx="60" cy="52" r="20" stroke="#5c7d9c" stroke-width="2"/><text x="60" y="56" font-size="9" fill="#aab4bc" text-anchor="middle" font-family="monospace">A/C</text>
+          <!-- belt -->
+          <path d="M40 100 q80 -30 160 0" stroke="#5c7d9c" stroke-width="2" fill="none"/><text x="120" y="118" font-size="8" fill="#aab4bc" text-anchor="middle" font-family="monospace">correia</text>
+          <!-- alternator (target) -->
+          <circle cx="176" cy="52" r="24" stroke="#f2a531" stroke-width="3"/><text x="176" y="56" font-size="9" fill="#f2a531" text-anchor="middle" font-family="monospace">ALT</text>
+          <line x1="150" y1="30" x2="120" y2="14" stroke="#f2a531" stroke-dasharray="3 3"/>
+        </svg>
+      </div>
+      <div class="rmlist">
+        <div class="rmitem"><div class="o">1</div><div><b>Desligar a bateria</b><span>segurança — polo negativo</span></div></div>
+        <div class="rmitem"><div class="o">2</div><div><b>Remover a correia do acessório</b><span>alivie o tensionador</span></div></div>
+        <div class="rmitem"><div class="o">3</div><div><b>Remover o compressor do A/C</b><span>desaparafusar e afastar (sem soltar o gás)</span></div></div>
+        <div class="rmitem target"><div class="o">★</div><div><b>Acessar e remover o alternador</b><span>solte o chicote e os 2 parafusos de fixação</span></div></div>
+      </div>
+      <div class="searchnote">Ilustrativo. Toque na peça na vista explodida para ver o procedimento e um vídeo (na versão final).</div>
+    </div>
+
     <!-- ===== MENTOR ===== -->
     <div class="screen" id="s-mentor">
-      <div class="apphead"><div class="brand"><span class="lamp"></span> MENTORIA</div><span class="readout" style="font-size:11px;color:var(--ink3)">3/5 este mês</span></div>
+      <div class="gd-head"><div class="back" onclick="go('s-inicio')">‹</div><div><h2>Mentoria</h2><div class="sym">3/5 atendimentos este mês</div></div></div>
       <div class="mentor-id">
         <div class="av">LM</div>
         <div><b>Léo · Eletrônica</b><br><span>reparo de módulos · 18 anos</span></div>
@@ -251,7 +322,7 @@
       </div>
       <div class="msg them">E aí! Vi que o guiado travou no bico. Chegou a testar os 4 na máquina de ultrassom?</div>
       <div class="msg me">Testei. 3 bons, 1 entupido. Troquei o bico mas ainda falha frio.</div>
-      <div class="msg them">Beleza. Falha só a frio aponta pra <b>sensor de temperatura (ECT)</b> mandando valor errado pra ECU enriquecer. Mede a resistência dele frio: tem que dar ~2.5kΩ a 20°C.</div>
+      <div class="msg them">Beleza. Falha só a frio aponta pra <b>sensor de temperatura (ECT)</b> mandando valor errado pra ECU enriquecer. Mede a resistência dele frio: ~2.5kΩ a 20°C.</div>
       <div class="msg them">Se estiver fora, é ele. Antes de trocar, confere o chicote — conector do ECT racha muito nesse Fire. 👀</div>
       <div class="msg me">Vou medir agora, valeu!</div>
       <div class="search" style="margin-top:2px"><input placeholder="Escreva ou grave um áudio…" aria-label="mensagem"><svg class="mic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg></div>
@@ -280,7 +351,6 @@
 
   </div>
 
-  <!-- bottom nav -->
   <nav class="nav" id="nav">
     <button class="on" data-s="s-inicio" onclick="go('s-inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>Início</button>
     <button data-s="s-diag" onclick="go('s-diag')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16M7 4v6a5 5 0 0 0 10 0V4M9 20h6M12 15v5"/></svg>Diagnóstico</button>
@@ -290,96 +360,150 @@
   </nav>
 </div>
 
+<div class="whatsnew">
+  <b>Novidades desta versão (v2), a partir do teste do mecânico:</b> ① o “não pega” agora vai <span class="amb">mais fundo</span> — teste de continuidade até o <span class="amb">pino 43</span> da central, separando chicote de driver da ECU; ② novo sintoma <span class="amb">“perde aceleração”</span> funcionando; ③ entrada por <span class="amb">texto livre / conversa</span> na busca; ④ dois módulos novos: <span class="amb">Consulta de peças</span> (medida + nº + foto) e <span class="amb">Vista explodida</span> (o que tirar para acessar a peça).
+</div>
+
 <div class="foot-note">
-  Identidade do app: escura tipo ferramenta de diagnóstico, com <b style="color:var(--amber)">âmbar de lâmpada de injeção</b> como sinal, verde para “confirmado/resolveu” e vermelho para “fora da faixa”. Valores técnicos em fonte <code>monoespaçada</code> como no leitor de scanner. Dados do protótipo são ilustrativos.
+  Identidade: escura tipo ferramenta de diagnóstico, <b style="color:var(--amber)">âmbar de lâmpada de injeção</b> como sinal, verde “confirmado”, vermelho “fora da faixa”. Valores em fonte <code>monoespaçada</code>. Dados ilustrativos.
 </div>
 
 <script>
   function go(id){
     document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
+    var navIds=['s-inicio','s-diag','s-consulta','s-mentor','s-comunidade'];
     document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===id));
-    document.querySelector('.screens').scrollTop=0;
     var sc=document.getElementById(id); if(sc) sc.scrollTop=0;
   }
+  var toastT;
+  function toast(msg){
+    var el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+    clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),2600);
+  }
+  function convSearch(){
+    var v=(document.getElementById('mainSearch').value||'').toLowerCase();
+    if(/n[aã]o\s*pega|nao pega/.test(v)){ startGD('naopega'); return; }
+    if(/acele|for[çc]a|puxa|fraco/.test(v)){ startGD('aceleracao'); return; }
+    if(v.trim()===''){ toast('Digite ou fale o defeito com suas palavras'); return; }
+    toast('Entendi seu sintoma — montando o passo a passo…');
+  }
 
-  // ---- guided diagnosis state machine ("não pega") ----
-  var STEPS=[
-    {q:"A bomba de combustível está pressurizando?",
-     how:"Ligue a chave e ouça o zunido por 2s. Ou meça a pressão na linha (manômetro).",
-     exp:["Pressão esperada","3.0 – 3.8 bar"],
-     ans:[{t:"Sim, tem pressão",k:"OK",c:"ok",next:1},{t:"Não / pressão baixa",k:"✕",c:"bad",cause:"bomba"}]},
-    {q:"Chega pulso no bico injetor ao dar partida?",
-     how:"Use o teste de pulso (noid light) ou o LED do scanner enquanto o motor gira.",
-     exp:["Sinal esperado","pulso rítmico"],
-     ans:[{t:"Não vem pulso",k:"✕",c:"bad",next:2},{t:"Vem pulso normal",k:"OK",c:"ok",cause:"outros"}]},
-    {q:"O sensor de rotação está emitindo sinal?",
-     how:"Osciloscópio no sensor de rotação girando o motor. Compare com a forma de onda de referência.",
-     exp:["Forma de onda","senoidal / referência ✓"],
-     ans:[{t:"Sim, tem sinal",k:"OK",c:"ok",next:3},{t:"Sem sinal",k:"✕",c:"bad",cause:"rotacao"}]},
-    {q:"A fiação sensor → pino da central está íntegra?",
-     how:"Continuidade do fio de sinal até o pino da ECU. Confira massa e conector.",
-     exp:["Sinal chega à central","sim ✓"],
-     ans:[{t:"Sim, sinal chega",k:"OK",c:"ok",next:4},{t:"Fio/conector com falha",k:"✕",c:"bad",cause:"chicote"}]},
-    {q:"Falta pulso em UM bico ou nos QUATRO?",
-     how:"Repita o teste de pulso em cada bico individualmente.",
-     exp:["Isolar o defeito","por bico"],
-     ans:[{t:"Só em 1 bico",k:"1",c:"bad",cause:"bico"},{t:"Nos 4 bicos",k:"4",c:"bad",cause:"driveECU"}]}
-  ];
-  var CAUSES={
-    bico:{h:"Bico injetor defeituoso",p:"Falta pulso isolado em um bico, com todo o resto OK — o problema está no próprio injetor ou no seu comando.",
-      test:"Retire os 4 bicos e teste na máquina de ultrassom (vazão + leque) ANTES de trocar.",part:["Bico injetor (unid.)","~R$ 90"],time:"MO: 0,8 h"},
-    bomba:{h:"Bomba de combustível / pressão",p:"Sem pressão de linha o motor não pega. Mas confirme antes de condenar a bomba.",
-      test:"Meça pressão residual e de trabalho. Cheque relé, fusível e chicote da bomba — muitas vezes é o relé, não a bomba.",part:["Bomba de combustível","~R$ 220"],time:"MO: 1,2 h"},
-    rotacao:{h:"Sensor de rotação (relutância)",p:"Sem sinal de rotação a ECU não injeta nem faísca.",
-      test:"Meça a resistência da bobina do sensor (~800Ω) e a distância (gap) à roda fônica. Cheque dentes da roda fônica.",part:["Sensor de rotação","~R$ 75"],time:"MO: 0,6 h"},
-    chicote:{h:"Chicote / conector do sinal",p:"O sinal existe mas não chega à central — é fio ou conector, NÃO a peça.",
-      test:"Repare o ponto de rompimento/oxidação. Não troque sensor nem ECU.",part:["Reparo de chicote","~R$ 40"],time:"MO: 0,5 h"},
-    driveECU:{h:"Estágio de saída da ECU / alimentação dos bicos",p:"Sem pulso nos 4 bicos, com sinal de rotação OK, aponta para alimentação comum dos bicos ou driver da central.",
-      test:"Cheque o positivo comum dos bicos (relé/fusível). Só suspeite da ECU depois — é o último a condenar.",part:["Verificar antes de ECU","—"],time:"MO: 1,0 h"},
-    outros:{h:"Pulso e combustível OK — investigar faísca/compressão",p:"Injeção está funcionando. Redirecionar para o ramo de ignição/compressão.",
-      test:"Teste faísca nas 4 velas e compressão do motor.",part:["—","—"],time:"—"}
+  // ---- flows ----
+  var FLOWS={
+    naopega:{ title:'Palio 1.0 Fire · “não pega”', steps:[
+      {q:"A bomba de combustível está pressurizando?",
+       how:"Ligue a chave e ouça o zunido por 2s, ou meça a pressão na linha (manômetro).",
+       exp:["Pressão esperada","3.0 – 3.8 bar"],
+       ans:[{t:"Sim, tem pressão",k:"OK",c:"ok",next:1},{t:"Não / pressão baixa",k:"✕",c:"bad",cause:"bomba"}]},
+      {q:"Chega pulso no bico injetor ao dar partida?",
+       how:"Use o teste de pulso (noid light) ou o LED do scanner enquanto o motor gira.",
+       exp:["Sinal esperado","pulso rítmico"],
+       ans:[{t:"Não vem pulso",k:"✕",c:"bad",next:2},{t:"Vem pulso normal",k:"OK",c:"ok",cause:"outros"}]},
+      {q:"O sensor de rotação está emitindo sinal?",
+       how:"Osciloscópio no sensor girando o motor. Compare com a forma de onda de referência.",
+       exp:["Forma de onda","senoidal / referência ✓"],
+       ans:[{t:"Sim, tem sinal",k:"OK",c:"ok",next:3},{t:"Sem sinal",k:"✕",c:"bad",cause:"rotacao"}]},
+      {q:"O sinal de rotação chega até a central?",
+       how:"Continuidade do fio de sinal do sensor de rotação até o pino da ECU; confira massa e conector.",
+       exp:["Sinal na central","sim ✓"],
+       ans:[{t:"Sim, chega",k:"OK",c:"ok",next:4},{t:"Não chega",k:"✕",c:"bad",cause:"chicoteRot"}]},
+      {q:"Falta pulso em UM bico ou nos QUATRO?",
+       how:"Repita o teste de pulso em cada bico individualmente.",
+       exp:["Isolar o defeito","por bico"],
+       ans:[{t:"Só em 1 bico",k:"1",c:"bad",next:5},{t:"Nos 4 bicos",k:"4",c:"bad",cause:"driveECU"}]},
+      {q:"Continuidade do fio do bico até o pino 43 da central?",
+       how:"Multímetro na escala de continuidade (resistência): uma ponta no fio de sinal do bico sem pulso, outra no pino 43 da ECU. Tem que apitar.",
+       exp:["Esperado","apitar (continuidade)"],
+       ans:[{t:"Não apita",k:"✕",c:"bad",cause:"chicoteBico"},{t:"Apita (continuidade OK)",k:"OK",c:"ok",next:6}]},
+      {q:"Chicote OK. Testou o bico na máquina e passou o scanner?",
+       how:"Retire os 4 bicos e teste na máquina (vazão + leque). Passe o scanner buscando falha registrada de comando de injeção.",
+       exp:["Isolar","bico × central"],
+       ans:[{t:"Bico com defeito na máquina",k:"1",c:"bad",cause:"bico"},{t:"Bico bom → suspeita da central",k:"✕",c:"bad",cause:"driveECU"}]}
+    ]},
+    aceleracao:{ title:'Palio 1.0 Fire · “perde aceleração”', steps:[
+      {q:"Perda de aceleração: prováveis são pedal, chicote e central. Vamos começar pelo pedal (TPS).",
+       how:"Meça a tensão no fio de sinal do pedal: deve variar suave de ~0,7 V (solto) a ~4,3 V (fundo). Confira também o +5 V de referência.",
+       exp:["Sinal do pedal","0,7 → 4,3 V progressivo"],
+       ans:[{t:"Varia suave e progressivo",k:"OK",c:"ok",next:1},{t:"Trava / salta / não varia",k:"✕",c:"bad",cause:"pedal"}]},
+      {q:"O chicote do pedal até a central está íntegro?",
+       how:"Continuidade dos fios do pedal aos pinos da ECU; procure mau contato/oxidação no conector.",
+       exp:["Esperado","continuidade nos fios"],
+       ans:[{t:"Íntegro",k:"OK",c:"ok",next:2},{t:"Rompido / mau contato",k:"✕",c:"bad",cause:"chicotePedal"}]},
+      {q:"A central responde ao comando do pedal?",
+       how:"Com o scanner, acelere e veja se a ECU responde (abertura de borboleta / rotação sobe) e se registra falha.",
+       exp:["Esperado","ECU responde ao pedal"],
+       ans:[{t:"Responde normal",k:"OK",c:"ok",cause:"outrosAcel"},{t:"Não responde",k:"✕",c:"bad",cause:"centralAcel"}]}
+    ]}
   };
 
-  var path=[];
-  function startGD(){ path=[]; renderGD(0); go('s-diag'); }
-  function renderProg(active,total,done){
-    var el=document.getElementById('gd-prog'); el.innerHTML='';
-    for(var i=0;i<total;i++){var s=document.createElement('i'); if(i<=active&&done!==false)s.className='on'; el.appendChild(s);}
+  var CAUSES={
+    bico:{h:"Bico injetor defeituoso",p:"Falta pulso isolado em um bico, chicote com continuidade OK e bico reprovado na máquina — o defeito é o próprio injetor.",
+      test:"Confirme na máquina de ultrassom (vazão + leque) antes de trocar.",part:["Bico injetor (unid.)","~R$ 90"],time:"MO: 0,8 h"},
+    bomba:{h:"Bomba de combustível / pressão",p:"Sem pressão de linha o motor não pega. Confirme antes de condenar a bomba.",
+      test:"Meça pressão residual e de trabalho. Cheque relé, fusível e chicote — muitas vezes é o relé, não a bomba.",part:["Bomba de combustível","~R$ 220"],time:"MO: 1,2 h"},
+    rotacao:{h:"Sensor de rotação (relutância)",p:"Sem sinal de rotação a ECU não injeta nem dá faísca.",
+      test:"Meça a resistência da bobina (~800Ω) e o gap à roda fônica. Cheque os dentes da roda fônica.",part:["Sensor de rotação","~R$ 75"],time:"MO: 0,6 h"},
+    chicoteRot:{h:"Chicote do sensor de rotação",p:"O sensor gera sinal, mas ele não chega à central — é fio/conector, NÃO o sensor.",
+      test:"Repare o ponto de rompimento/oxidação. Não troque o sensor nem a ECU.",part:["Reparo de chicote","~R$ 40"],time:"MO: 0,5 h"},
+    chicoteBico:{h:"Chicote do bico (fio até o pino 43)",p:"Não houve continuidade do fio do bico até o pino 43 da central — o fio está rompido ou o conector oxidado.",
+      test:"Localize o rompimento e repare. Não troque o bico nem a central.",part:["Reparo de chicote","~R$ 40"],time:"MO: 0,6 h"},
+    driveECU:{h:"Central de injeção (driver/estágio de saída)",p:"Chicote OK e bico bom (ou falta pulso nos 4) apontam para o driver de injeção da própria central.",
+      test:"Cheque antes o positivo comum dos bicos (relé/fusível). Confirmando, remova a central e mande para teste de bancada.",part:["Teste de bancada da ECU","serviço"],time:"MO: 1,0 h"},
+    outros:{h:"Injeção OK — investigar faísca / compressão",p:"Pulso e combustível estão funcionando. Redirecionar para o ramo de ignição/compressão.",
+      test:"Teste faísca nas 4 velas e a compressão do motor.",part:["—","—"],time:"—"},
+    pedal:{h:"Sensor do pedal do acelerador (APP/TPS)",p:"O sinal do pedal está travando, saltando ou não variando de forma progressiva.",
+      test:"Confirme os dois trilhos do sensor e o +5 V de referência antes de trocar. Verifique também o conector.",part:["Sensor de pedal","~R$ 180"],time:"MO: 0,5 h"},
+    chicotePedal:{h:"Chicote do pedal até a central",p:"O pedal gera sinal, mas o chicote está rompido ou com mau contato até a ECU.",
+      test:"Repare o fio/conector. Não troque o pedal nem a central.",part:["Reparo de chicote","~R$ 45"],time:"MO: 0,6 h"},
+    centralAcel:{h:"Central de injeção não responde",p:"Pedal e chicote OK, mas a ECU não responde ao comando — suspeita da própria central.",
+      test:"Passe o scanner buscando falha. Confirmando, remova a central e mande para teste de bancada.",part:["Teste de bancada da ECU","serviço"],time:"MO: 1,0 h"},
+    outrosAcel:{h:"Pedal, chicote e central OK — investigar ar/combustível/escape",p:"O comando está respondendo. A perda de força está em outro ponto.",
+      test:"Cheque pressão de combustível, filtro, entrada de ar falsa e catalisador entupido (contrapressão).",part:["—","—"],time:"—"}
+  };
+
+  var GD={steps:null};
+  function startGD(flowKey){
+    flowKey=flowKey||'naopega'; var f=FLOWS[flowKey];
+    GD.steps=f.steps; document.getElementById('gd-sym').textContent=f.title;
+    renderGD(0); go('s-diag');
+  }
+  function renderProg(active){
+    var el=document.getElementById('gd-prog'); el.innerHTML=''; var total=GD.steps.length;
+    for(var i=0;i<total;i++){var s=document.createElement('i'); if(i<=active)s.className='on'; el.appendChild(s);}
   }
   function renderGD(idx){
-    var body=document.getElementById('gd-body'); var st=STEPS[idx];
-    renderProg(idx,STEPS.length,true);
-    var h='<div class="qcard"><div class="step-n">PASSO '+(idx+1)+' DE '+STEPS.length+'</div>'+
+    var st=GD.steps[idx]; renderProg(idx);
+    var h='<div class="qcard"><div class="step-n">PASSO '+(idx+1)+' DE '+GD.steps.length+'</div>'+
       '<div class="q">'+st.q+'</div>'+
       '<div class="how"><b>Como testar:</b> '+st.how+'</div>'+
       '<div class="exp"><span>'+st.exp[0]+'</span><span class="val">'+st.exp[1]+'</span></div>'+
       '<div class="ans">';
-    st.ans.forEach(function(a,i){
-      h+='<button class="btn '+a.c+'" onclick="answer('+idx+','+i+')"><span class="mk">'+a.k+'</span>'+a.t+'</button>';
-    });
+    st.ans.forEach(function(a,i){ h+='<button class="btn '+a.c+'" onclick="answer('+idx+','+i+')"><span class="mk">'+a.k+'</span>'+a.t+'</button>'; });
     h+='</div></div>';
-    body.innerHTML=h; body.parentElement.scrollTop=0;
+    document.getElementById('gd-body').innerHTML=h;
+    document.getElementById('s-diag').scrollTop=0;
   }
   function answer(idx,i){
-    var a=STEPS[idx].ans[i]; path.push(idx);
-    if(a.cause){ renderVerdict(a.cause); }
-    else { renderGD(a.next); }
+    var a=GD.steps[idx].ans[i];
+    if(a.cause){ renderVerdict(a.cause); } else { renderGD(a.next); }
   }
   function renderVerdict(key){
-    var c=CAUSES[key]; var body=document.getElementById('gd-body');
-    renderProg(STEPS.length,STEPS.length,true);
-    var partHtml = c.part[1]!=="—" ? '<div class="partrow"><span class="p">'+c.part[0]+'</span><span class="t">'+c.part[1]+'</span></div>'+
-       '<div class="partrow"><span class="p">Tempo de mão de obra</span><span class="t">'+c.time+'</span></div>' : '';
-    body.innerHTML=
+    var c=CAUSES[key]; renderProg(GD.steps.length);
+    var partHtml = c.part[1]!=="—"
+      ? '<div class="partrow"><span class="p">'+c.part[0]+'</span><span class="t">'+c.part[1]+'</span></div>'+
+        '<div class="partrow"><span class="p">Tempo de mão de obra</span><span class="t">'+c.time+'</span></div>'
+      : '';
+    document.getElementById('gd-body').innerHTML=
       '<div class="verdict"><span class="tag">✔ CAUSA CONFIRMADA</span>'+
       '<h2>'+c.h+'</h2><p>'+c.p+'</p>'+
       '<div class="warnbox"><b>Teste antes de trocar:</b>&nbsp;'+c.test+'</div>'+
       partHtml+
       '<div class="actions">'+
-        '<div class="a primary" onclick="startGD()">✔ Resolveu!</div>'+
+        '<div class="a primary" onclick="go(\'s-inicio\')">✔ Resolveu!</div>'+
         '<div class="a ghost" onclick="go(\'s-mentor\')">Chamar mentor</div>'+
       '</div>'+
       '<p style="font-size:12px;color:var(--ink3);text-align:center;margin-top:2px">Seu “Resolveu!” melhora o ranking de causas para todos.</p>'+
       '</div>';
+    document.getElementById('s-diag').scrollTop=0;
   }
 </script>
