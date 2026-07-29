@@ -1,0 +1,385 @@
+<title>Protótipo — App do Mecânico</title>
+<style>
+  :root{
+    --page:#e9ecec; --page-ink:#181b1e; --page-ink2:#5a636a; --page-line:#d3d8d7; --page-card:#f7f8f7;
+    /* app (device) brand — committed dark diagnostic identity */
+    --bg:#0e1114; --bg2:#161b20; --bg3:#1e252b; --line:#2a323a; --line2:#3a444d;
+    --ink:#eef2f4; --ink2:#aab4bc; --ink3:#727d85;
+    --amber:#f2a531; --amber-soft:#33260f;
+    --pass:#43c785; --pass-soft:#12321f; --fail:#ec6b66; --fail-soft:#33191a; --steel:#5c7d9c;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{--page:#0a0c0e;--page-ink:#eef1f2;--page-ink2:#98a2a9;--page-line:#20262b;--page-card:#12171b}}
+  :root[data-theme="dark"]{--page:#0a0c0e;--page-ink:#eef1f2;--page-ink2:#98a2a9;--page-line:#20262b;--page-card:#12171b}
+  :root[data-theme="light"]{--page:#e9ecec;--page-ink:#181b1e;--page-ink2:#5a636a;--page-line:#d3d8d7;--page-card:#f7f8f7}
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--page-ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;
+    padding:clamp(18px,4vw,44px) 16px 60px;gap:26px}
+  .head{max-width:640px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+  .head .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+  .head h1{margin:0;font-size:clamp(22px,4vw,32px);letter-spacing:-.02em;text-wrap:balance}
+  .head p{margin:0;color:var(--page-ink2);max-width:52ch;font-size:15px}
+  .hint{font-family:var(--mono);font-size:12px;color:var(--page-ink2);display:flex;align-items:center;gap:8px;
+    border:1px dashed var(--page-line);padding:7px 13px;border-radius:999px}
+  .hint b{color:var(--amber)}
+
+  /* device */
+  .phone{width:390px;max-width:94vw;height:800px;max-height:86vh;background:var(--bg);border-radius:42px;
+    border:1px solid var(--line2);box-shadow:0 40px 80px -30px rgba(0,0,0,.6),0 0 0 11px #05070988;
+    overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:26px;background:#05070a;
+    border-radius:0 0 18px 18px;z-index:40}
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px 6px;
+    font-family:var(--mono);font-size:12px;color:var(--ink2);flex:0 0 auto}
+  .statusbar .r{display:flex;gap:6px;align-items:center}
+
+  /* screens */
+  .screens{flex:1 1 auto;position:relative;overflow:hidden}
+  .screen{position:absolute;inset:0;overflow-y:auto;padding:6px 18px 20px;display:none;flex-direction:column;gap:14px}
+  .screen.active{display:flex;animation:fade .28s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen.active{animation:none}}
+  .screen::-webkit-scrollbar{width:0}
+
+  .apphead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:4px}
+  .apphead .brand{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-weight:600;font-size:13px;letter-spacing:.03em;color:var(--ink)}
+  .lamp{width:11px;height:11px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+  .veh{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:11px}
+  .veh .plate{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--ink);background:var(--bg3);
+    border:1px solid var(--line2);border-radius:6px;padding:4px 8px;letter-spacing:.08em}
+  .veh .d{font-size:13px;color:var(--ink2);line-height:1.3}
+  .veh .d b{color:var(--ink);font-size:13.5px}
+  .veh .chg{margin-left:auto;font-size:12px;color:var(--amber);font-family:var(--mono)}
+
+  .search{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--line2);
+    border-radius:13px;padding:13px 14px}
+  .search svg{flex:0 0 auto}
+  .search input{border:0;background:transparent;color:var(--ink);font-size:15px;width:100%;outline:none;font-family:var(--sans)}
+  .search input::placeholder{color:var(--ink3)}
+  .search .mic{color:var(--amber)}
+
+  .label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:6px 2px -2px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;padding:9px 13px;border-radius:999px;border:1px solid var(--line2);background:var(--bg2);
+    color:var(--ink);cursor:pointer;transition:.15s;font-family:var(--sans)}
+  .chip:hover{border-color:var(--amber);color:var(--amber)}
+  .chip.warn{border-color:var(--amber);background:var(--amber-soft);color:var(--amber)}
+
+  .card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:10px}
+  .card .ct{display:flex;align-items:center;gap:9px}
+  .card .ct .ic{width:30px;height:30px;border-radius:8px;background:var(--amber-soft);color:var(--amber);
+    display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto}
+  .card .ct h3{margin:0;font-size:15px;color:var(--ink)}
+  .card .ct .sub{font-size:12px;color:var(--ink3);font-family:var(--mono)}
+
+  .readout{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .metric{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg3);
+    border:1px solid var(--line);border-radius:10px}
+  .metric .k{font-size:13px;color:var(--ink2)}
+  .metric .v{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--amber)}
+  .rangebar{height:8px;border-radius:6px;background:linear-gradient(90deg,var(--fail) 0 18%,var(--pass) 18% 62%,var(--fail) 62% 100%);position:relative;margin:2px 0 0}
+  .rangebar .needle{position:absolute;top:-4px;width:2px;height:16px;background:var(--ink);border-radius:2px}
+  .rangelabels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--ink3)}
+
+  /* guided diagnosis */
+  .gd-head{display:flex;align-items:center;gap:10px}
+  .gd-head .back{cursor:pointer;color:var(--ink2);font-size:20px;line-height:1;background:var(--bg2);border:1px solid var(--line);
+    width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+  .gd-head h2{margin:0;font-size:16px;color:var(--ink)}
+  .gd-head .sym{font-family:var(--mono);font-size:12px;color:var(--amber)}
+  .progress{display:flex;gap:5px;margin:2px 0}
+  .progress i{height:4px;flex:1;border-radius:3px;background:var(--line2)}
+  .progress i.on{background:var(--amber)}
+  .qcard{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+  .qcard .step-n{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.1em}
+  .qcard .q{font-size:19px;font-weight:650;color:var(--ink);line-height:1.3;text-wrap:balance}
+  .qcard .how{font-size:13px;color:var(--ink2);background:var(--bg3);border-left:3px solid var(--steel);padding:9px 12px;border-radius:0 8px 8px 0}
+  .qcard .how b{color:var(--ink)}
+  .exp{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--ink2);
+    background:var(--bg3);border:1px solid var(--line);border-radius:9px;padding:8px 11px}
+  .exp .val{color:var(--amber);font-weight:700}
+  .ans{display:flex;flex-direction:column;gap:9px}
+  .btn{border:1px solid var(--line2);background:var(--bg3);color:var(--ink);padding:13px 15px;border-radius:11px;
+    font-size:15px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:11px;transition:.15s;font-family:var(--sans)}
+  .btn:hover{border-color:var(--amber)}
+  .btn .mk{font-family:var(--mono);font-size:12px;font-weight:700;width:24px;height:24px;border-radius:6px;display:flex;
+    align-items:center;justify-content:center;flex:0 0 auto}
+  .btn.ok .mk{background:var(--pass-soft);color:var(--pass)}
+  .btn.bad .mk{background:var(--fail-soft);color:var(--fail)}
+  .btn.neutral .mk{background:var(--bg2);color:var(--ink3)}
+
+  .verdict{background:linear-gradient(180deg,var(--pass-soft),var(--bg2));border:1px solid var(--pass);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+  .verdict .tag{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--pass)}
+  .verdict h2{margin:0;font-size:20px;color:var(--ink)}
+  .verdict p{margin:0;font-size:14px;color:var(--ink2)}
+  .verdict .warnbox{background:var(--amber-soft);border:1px solid var(--amber);border-radius:10px;padding:11px 13px;
+    font-size:13px;color:var(--ink);display:flex;gap:9px}
+  .verdict .warnbox b{color:var(--amber)}
+  .partrow{display:flex;justify-content:space-between;align-items:center;background:var(--bg3);border:1px solid var(--line);
+    border-radius:10px;padding:11px 13px;font-size:13px}
+  .partrow .p{color:var(--ink)} .partrow .t{font-family:var(--mono);color:var(--amber);font-weight:700}
+  .actions{display:flex;gap:9px}
+  .actions .a{flex:1;text-align:center;padding:12px;border-radius:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+  .a.primary{background:var(--amber);color:#1a1205;border:1px solid var(--amber)}
+  .a.ghost{background:transparent;color:var(--ink);border:1px solid var(--line2)}
+
+  /* mentor chat */
+  .msg{max-width:82%;padding:11px 13px;border-radius:14px;font-size:14px;line-height:1.4}
+  .msg.them{align-self:flex-start;background:var(--bg2);border:1px solid var(--line);border-bottom-left-radius:5px;color:var(--ink)}
+  .msg.me{align-self:flex-end;background:var(--amber-soft);border:1px solid var(--amber);border-bottom-right-radius:5px;color:var(--ink)}
+  .mentor-id{display:flex;align-items:center;gap:11px;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:11px 13px}
+  .mentor-id .av{width:40px;height:40px;border-radius:50%;background:var(--amber-soft);color:var(--amber);font-family:var(--mono);
+    font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .mentor-id b{color:var(--ink);font-size:14px} .mentor-id span{font-size:12px;color:var(--ink3)}
+  .mentor-id .on{margin-left:auto;font-size:11px;font-family:var(--mono);color:var(--pass);display:flex;align-items:center;gap:5px}
+  .mentor-id .on::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--pass);box-shadow:0 0 8px var(--pass)}
+
+  .community .post{background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:7px}
+  .post .top{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);font-family:var(--mono)}
+  .post .top .fix{margin-left:auto;background:var(--pass-soft);color:var(--pass);padding:2px 8px;border-radius:6px;font-weight:700}
+  .post .body{font-size:14px;color:var(--ink)}
+  .post .foot{display:flex;gap:14px;font-size:12px;color:var(--ink2);font-family:var(--mono)}
+  .post .foot b{color:var(--amber)}
+
+  /* bottom nav */
+  .nav{flex:0 0 auto;display:flex;background:var(--bg2);border-top:1px solid var(--line);padding:9px 8px 16px}
+  .nav button{flex:1;background:none;border:0;color:var(--ink3);display:flex;flex-direction:column;align-items:center;gap:3px;
+    font-size:10px;font-family:var(--sans);cursor:pointer;padding:4px 0}
+  .nav button svg{width:22px;height:22px}
+  .nav button.on{color:var(--amber)}
+
+  .foot-note{max-width:640px;text-align:center;color:var(--page-ink2);font-size:13px;line-height:1.5}
+  .foot-note code{font-family:var(--mono);font-size:12px;background:var(--page-card);border:1px solid var(--page-line);padding:2px 6px;border-radius:5px}
+</style>
+
+<div class="head">
+  <div class="eyebrow">Protótipo navegável · MVP</div>
+  <h1>O mentor do mecânico — telas principais</h1>
+  <p>Mockup clicável. O <b>Diagnóstico Guiado</b> funciona de verdade: escolha um sintoma e percorra a árvore de decisão até a causa confirmada. Use a barra inferior para navegar entre as telas.</p>
+  <div class="hint">👆 Toque em <b>“Não pega”</b> na tela inicial para ver o mentor em ação</div>
+</div>
+
+<div class="phone" role="application" aria-label="Protótipo do app">
+  <div class="notch"></div>
+  <div class="statusbar"><span>9:41</span><span class="r">oficina · 4G <span>▮▮▮</span></span></div>
+
+  <div class="screens">
+
+    <!-- ===== INÍCIO ===== -->
+    <div class="screen active" id="s-inicio">
+      <div class="apphead">
+        <div class="brand"><span class="lamp"></span> MECÂNICO PRO</div>
+        <div class="readout" style="font-size:12px;color:var(--ink3)">nível: Bronze ▴</div>
+      </div>
+      <div class="veh">
+        <span class="plate">PALIO</span>
+        <div class="d"><b>Fiat Palio 1.0 Fire</b><br>2012 · flex · 8V</div>
+        <span class="chg">trocar ›</span>
+      </div>
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#727d85" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input placeholder="Peça, código, sintoma ou pergunta…" aria-label="busca">
+        <svg class="mic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg>
+      </div>
+
+      <div class="label">Diagnóstico por sintoma</div>
+      <div class="chips">
+        <button class="chip warn" onclick="startGD()">🔑 Não pega</button>
+        <button class="chip" onclick="go('s-diag')">💨 Fumaça preta</button>
+        <button class="chip" onclick="go('s-diag')">📉 Falha em baixa</button>
+        <button class="chip" onclick="go('s-diag')">🌡️ Esquenta</button>
+        <button class="chip" onclick="go('s-diag')">⚙️ Trepida</button>
+        <button class="chip" onclick="go('s-diag')">🔧 Luz de injeção</button>
+      </div>
+
+      <div class="label">Consulta rápida</div>
+      <div class="card" onclick="go('s-consulta')" style="cursor:pointer">
+        <div class="ct"><div class="ic">🔩</div><div><h3>Torque & sincronismo</h3><div class="sub">cabeçote · roda · correia</div></div></div>
+      </div>
+      <div class="card" onclick="go('s-consulta')" style="cursor:pointer">
+        <div class="ct"><div class="ic">📊</div><div><h3>Faixa de trabalho do sensor</h3><div class="sub">MAP · MAF · TPS · lambda</div></div></div>
+      </div>
+      <div class="card" onclick="go('s-mentor')" style="cursor:pointer">
+        <div class="ct"><div class="ic">🎧</div><div><h3>Falar com um mentor</h3><div class="sub">técnico sênior · resposta rápida</div></div></div>
+      </div>
+    </div>
+
+    <!-- ===== DIAGNÓSTICO GUIADO ===== -->
+    <div class="screen" id="s-diag">
+      <div class="gd-head">
+        <div class="back" onclick="go('s-inicio')" role="button" aria-label="voltar">‹</div>
+        <div><h2>Diagnóstico Guiado</h2><div class="sym" id="gd-sym">Palio 1.0 Fire · “não pega”</div></div>
+      </div>
+      <div class="progress" id="gd-prog"></div>
+      <div id="gd-body"></div>
+    </div>
+
+    <!-- ===== CONSULTA ===== -->
+    <div class="screen" id="s-consulta">
+      <div class="apphead"><div class="brand"><span class="lamp"></span> CONSULTA</div></div>
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#727d85" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input value="sensor MAP" aria-label="busca">
+      </div>
+      <div class="card">
+        <div class="ct"><div class="ic">📊</div><div><h3>Sensor MAP — Palio 1.0 Fire</h3><div class="sub">faixa de trabalho</div></div></div>
+        <div class="metric"><span class="k">Sua leitura (scanner)</span><span class="v">600 mbar</span></div>
+        <div class="rangebar"><span class="needle" style="left:92%"></span></div>
+        <div class="rangelabels"><span>300</span><span>faixa OK 300–500</span><span>700</span></div>
+        <div class="how" style="font-size:13px;color:var(--ink2);background:var(--fail-soft);border-left:3px solid var(--fail);padding:9px 12px;border-radius:0 8px 8px 0">
+          <b style="color:var(--fail)">600 está ALTO.</b> Indica muita entrada de ar (vácuo baixo). Verifique: mangueira de vácuo, corpo de borboleta, junta do coletor.
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct"><div class="ic">🔩</div><div><h3>Torque — parafuso do cabeçote</h3><div class="sub">motor Fire 1.0 8V</div></div></div>
+        <div class="metric"><span class="k">Aperto (etapa final)</span><span class="v">30 Nm + 90°</span></div>
+        <div class="exp"><span>Sequência</span><span class="val">espiral, do centro p/ fora</span></div>
+        <div class="exp"><span>Parafuso</span><span class="val">uso único — substituir</span></div>
+      </div>
+    </div>
+
+    <!-- ===== MENTOR ===== -->
+    <div class="screen" id="s-mentor">
+      <div class="apphead"><div class="brand"><span class="lamp"></span> MENTORIA</div><span class="readout" style="font-size:11px;color:var(--ink3)">3/5 este mês</span></div>
+      <div class="mentor-id">
+        <div class="av">LM</div>
+        <div><b>Léo · Eletrônica</b><br><span>reparo de módulos · 18 anos</span></div>
+        <span class="on">online</span>
+      </div>
+      <div class="msg them">E aí! Vi que o guiado travou no bico. Chegou a testar os 4 na máquina de ultrassom?</div>
+      <div class="msg me">Testei. 3 bons, 1 entupido. Troquei o bico mas ainda falha frio.</div>
+      <div class="msg them">Beleza. Falha só a frio aponta pra <b>sensor de temperatura (ECT)</b> mandando valor errado pra ECU enriquecer. Mede a resistência dele frio: tem que dar ~2.5kΩ a 20°C.</div>
+      <div class="msg them">Se estiver fora, é ele. Antes de trocar, confere o chicote — conector do ECT racha muito nesse Fire. 👀</div>
+      <div class="msg me">Vou medir agora, valeu!</div>
+      <div class="search" style="margin-top:2px"><input placeholder="Escreva ou grave um áudio…" aria-label="mensagem"><svg class="mic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/></svg></div>
+    </div>
+
+    <!-- ===== COMUNIDADE ===== -->
+    <div class="screen community" id="s-comunidade">
+      <div class="apphead"><div class="brand"><span class="lamp"></span> COMUNIDADE</div></div>
+      <div class="label">Casos que resolveram · Palio Fire</div>
+      <div class="post">
+        <div class="top"><span>@oficina_do_ze</span> · SP <span class="fix">✔ RESOLVEU 47×</span></div>
+        <div class="body">Falha a frio + luz de injeção → era o <b>sensor de temperatura</b>. Trocou e resolveu. Chicote do conector estava ressecado.</div>
+        <div class="foot"><span>👍 <b>128</b></span><span>💬 22</span><span>DTC P0117</span></div>
+      </div>
+      <div class="post">
+        <div class="top"><span>@auto_eletrica_cida</span> · MG <span class="fix">✔ RESOLVEU 31×</span></div>
+        <div class="body">“Não pega” de manhã → <b>bomba de combustível</b> perdendo pressão de retorno. Testar pressão residual antes de condenar a bomba!</div>
+        <div class="foot"><span>👍 <b>96</b></span><span>💬 14</span><span>sintoma: não pega</span></div>
+      </div>
+      <div class="post">
+        <div class="top"><span>@marao_diesel</span> · PR <span class="fix">✔ RESOLVEU 12×</span></div>
+        <div class="body">Marcha lenta oscilando → limpeza do <b>corpo de borboleta</b> + reaprender TPS pelo scanner. Sem trocar nada.</div>
+        <div class="foot"><span>👍 <b>74</b></span><span>💬 9</span><span>economia de peça</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- bottom nav -->
+  <nav class="nav" id="nav">
+    <button class="on" data-s="s-inicio" onclick="go('s-inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg>Início</button>
+    <button data-s="s-diag" onclick="go('s-diag')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16M7 4v6a5 5 0 0 0 10 0V4M9 20h6M12 15v5"/></svg>Diagnóstico</button>
+    <button data-s="s-consulta" onclick="go('s-consulta')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Consulta</button>
+    <button data-s="s-mentor" onclick="go('s-mentor')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 1 18 0 9 9 0 0 1-9 9H3l2.3-2.3A8.96 8.96 0 0 1 3 12z"/></svg>Mentor</button>
+    <button data-s="s-comunidade" onclick="go('s-comunidade')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M14 20a5 5 0 0 1 7 0"/></svg>Comunidade</button>
+  </nav>
+</div>
+
+<div class="foot-note">
+  Identidade do app: escura tipo ferramenta de diagnóstico, com <b style="color:var(--amber)">âmbar de lâmpada de injeção</b> como sinal, verde para “confirmado/resolveu” e vermelho para “fora da faixa”. Valores técnicos em fonte <code>monoespaçada</code> como no leitor de scanner. Dados do protótipo são ilustrativos.
+</div>
+
+<script>
+  function go(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
+    document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===id));
+    document.querySelector('.screens').scrollTop=0;
+    var sc=document.getElementById(id); if(sc) sc.scrollTop=0;
+  }
+
+  // ---- guided diagnosis state machine ("não pega") ----
+  var STEPS=[
+    {q:"A bomba de combustível está pressurizando?",
+     how:"Ligue a chave e ouça o zunido por 2s. Ou meça a pressão na linha (manômetro).",
+     exp:["Pressão esperada","3.0 – 3.8 bar"],
+     ans:[{t:"Sim, tem pressão",k:"OK",c:"ok",next:1},{t:"Não / pressão baixa",k:"✕",c:"bad",cause:"bomba"}]},
+    {q:"Chega pulso no bico injetor ao dar partida?",
+     how:"Use o teste de pulso (noid light) ou o LED do scanner enquanto o motor gira.",
+     exp:["Sinal esperado","pulso rítmico"],
+     ans:[{t:"Não vem pulso",k:"✕",c:"bad",next:2},{t:"Vem pulso normal",k:"OK",c:"ok",cause:"outros"}]},
+    {q:"O sensor de rotação está emitindo sinal?",
+     how:"Osciloscópio no sensor de rotação girando o motor. Compare com a forma de onda de referência.",
+     exp:["Forma de onda","senoidal / referência ✓"],
+     ans:[{t:"Sim, tem sinal",k:"OK",c:"ok",next:3},{t:"Sem sinal",k:"✕",c:"bad",cause:"rotacao"}]},
+    {q:"A fiação sensor → pino da central está íntegra?",
+     how:"Continuidade do fio de sinal até o pino da ECU. Confira massa e conector.",
+     exp:["Sinal chega à central","sim ✓"],
+     ans:[{t:"Sim, sinal chega",k:"OK",c:"ok",next:4},{t:"Fio/conector com falha",k:"✕",c:"bad",cause:"chicote"}]},
+    {q:"Falta pulso em UM bico ou nos QUATRO?",
+     how:"Repita o teste de pulso em cada bico individualmente.",
+     exp:["Isolar o defeito","por bico"],
+     ans:[{t:"Só em 1 bico",k:"1",c:"bad",cause:"bico"},{t:"Nos 4 bicos",k:"4",c:"bad",cause:"driveECU"}]}
+  ];
+  var CAUSES={
+    bico:{h:"Bico injetor defeituoso",p:"Falta pulso isolado em um bico, com todo o resto OK — o problema está no próprio injetor ou no seu comando.",
+      test:"Retire os 4 bicos e teste na máquina de ultrassom (vazão + leque) ANTES de trocar.",part:["Bico injetor (unid.)","~R$ 90"],time:"MO: 0,8 h"},
+    bomba:{h:"Bomba de combustível / pressão",p:"Sem pressão de linha o motor não pega. Mas confirme antes de condenar a bomba.",
+      test:"Meça pressão residual e de trabalho. Cheque relé, fusível e chicote da bomba — muitas vezes é o relé, não a bomba.",part:["Bomba de combustível","~R$ 220"],time:"MO: 1,2 h"},
+    rotacao:{h:"Sensor de rotação (relutância)",p:"Sem sinal de rotação a ECU não injeta nem faísca.",
+      test:"Meça a resistência da bobina do sensor (~800Ω) e a distância (gap) à roda fônica. Cheque dentes da roda fônica.",part:["Sensor de rotação","~R$ 75"],time:"MO: 0,6 h"},
+    chicote:{h:"Chicote / conector do sinal",p:"O sinal existe mas não chega à central — é fio ou conector, NÃO a peça.",
+      test:"Repare o ponto de rompimento/oxidação. Não troque sensor nem ECU.",part:["Reparo de chicote","~R$ 40"],time:"MO: 0,5 h"},
+    driveECU:{h:"Estágio de saída da ECU / alimentação dos bicos",p:"Sem pulso nos 4 bicos, com sinal de rotação OK, aponta para alimentação comum dos bicos ou driver da central.",
+      test:"Cheque o positivo comum dos bicos (relé/fusível). Só suspeite da ECU depois — é o último a condenar.",part:["Verificar antes de ECU","—"],time:"MO: 1,0 h"},
+    outros:{h:"Pulso e combustível OK — investigar faísca/compressão",p:"Injeção está funcionando. Redirecionar para o ramo de ignição/compressão.",
+      test:"Teste faísca nas 4 velas e compressão do motor.",part:["—","—"],time:"—"}
+  };
+
+  var path=[];
+  function startGD(){ path=[]; renderGD(0); go('s-diag'); }
+  function renderProg(active,total,done){
+    var el=document.getElementById('gd-prog'); el.innerHTML='';
+    for(var i=0;i<total;i++){var s=document.createElement('i'); if(i<=active&&done!==false)s.className='on'; el.appendChild(s);}
+  }
+  function renderGD(idx){
+    var body=document.getElementById('gd-body'); var st=STEPS[idx];
+    renderProg(idx,STEPS.length,true);
+    var h='<div class="qcard"><div class="step-n">PASSO '+(idx+1)+' DE '+STEPS.length+'</div>'+
+      '<div class="q">'+st.q+'</div>'+
+      '<div class="how"><b>Como testar:</b> '+st.how+'</div>'+
+      '<div class="exp"><span>'+st.exp[0]+'</span><span class="val">'+st.exp[1]+'</span></div>'+
+      '<div class="ans">';
+    st.ans.forEach(function(a,i){
+      h+='<button class="btn '+a.c+'" onclick="answer('+idx+','+i+')"><span class="mk">'+a.k+'</span>'+a.t+'</button>';
+    });
+    h+='</div></div>';
+    body.innerHTML=h; body.parentElement.scrollTop=0;
+  }
+  function answer(idx,i){
+    var a=STEPS[idx].ans[i]; path.push(idx);
+    if(a.cause){ renderVerdict(a.cause); }
+    else { renderGD(a.next); }
+  }
+  function renderVerdict(key){
+    var c=CAUSES[key]; var body=document.getElementById('gd-body');
+    renderProg(STEPS.length,STEPS.length,true);
+    var partHtml = c.part[1]!=="—" ? '<div class="partrow"><span class="p">'+c.part[0]+'</span><span class="t">'+c.part[1]+'</span></div>'+
+       '<div class="partrow"><span class="p">Tempo de mão de obra</span><span class="t">'+c.time+'</span></div>' : '';
+    body.innerHTML=
+      '<div class="verdict"><span class="tag">✔ CAUSA CONFIRMADA</span>'+
+      '<h2>'+c.h+'</h2><p>'+c.p+'</p>'+
+      '<div class="warnbox"><b>Teste antes de trocar:</b>&nbsp;'+c.test+'</div>'+
+      partHtml+
+      '<div class="actions">'+
+        '<div class="a primary" onclick="startGD()">✔ Resolveu!</div>'+
+        '<div class="a ghost" onclick="go(\'s-mentor\')">Chamar mentor</div>'+
+      '</div>'+
+      '<p style="font-size:12px;color:var(--ink3);text-align:center;margin-top:2px">Seu “Resolveu!” melhora o ranking de causas para todos.</p>'+
+      '</div>';
+  }
+</script>
