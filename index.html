@@ -290,26 +290,40 @@
     <!-- ===== VISTA EXPLODIDA (novo) ===== -->
     <div class="screen" id="s-explodida">
       <div class="gd-head"><div class="back" onclick="go('s-inicio')">‹</div><div><h2>Vista explodida</h2><div class="sym">Alternador · Ford Ka 1.0</div></div></div>
-      <div class="how"><b>O que você quer remover?</b> Alternador. Veja abaixo o que precisa sair antes — e a ordem.</div>
+      <div class="how"><b>O que você quer remover?</b> Alternador. O desenho mostra o que sai antes, em ordem — e já com o <b>torque de remontagem</b> em cada fixação.</div>
       <div class="exploded">
-        <svg width="240" height="150" viewBox="0 0 240 150" fill="none">
-          <rect x="8" y="10" width="224" height="130" rx="10" stroke="#2a323a"/>
-          <!-- compressor -->
-          <circle cx="60" cy="52" r="20" stroke="#5c7d9c" stroke-width="2"/><text x="60" y="56" font-size="9" fill="#aab4bc" text-anchor="middle" font-family="monospace">A/C</text>
-          <!-- belt -->
-          <path d="M40 100 q80 -30 160 0" stroke="#5c7d9c" stroke-width="2" fill="none"/><text x="120" y="118" font-size="8" fill="#aab4bc" text-anchor="middle" font-family="monospace">correia</text>
-          <!-- alternator (target) -->
-          <circle cx="176" cy="52" r="24" stroke="#f2a531" stroke-width="3"/><text x="176" y="56" font-size="9" fill="#f2a531" text-anchor="middle" font-family="monospace">ALT</text>
-          <line x1="150" y1="30" x2="120" y2="14" stroke="#f2a531" stroke-dasharray="3 3"/>
+        <svg width="260" height="180" viewBox="0 0 260 180" fill="none">
+          <!-- engine block (context, faded) -->
+          <path d="M196 22 h48 v120 h-34 l-14 -14 z" stroke="#2a323a" stroke-width="2"/>
+          <path d="M204 40 h30 M204 54 h30 M204 68 h30" stroke="#2a323a"/>
+          <!-- 1: belt -->
+          <path d="M28 132 q90 -36 180 -6" stroke="#5c7d9c" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+          <circle cx="28" cy="132" r="10" stroke="#5c7d9c" stroke-width="1.5"/><text x="28" y="136" font-size="9" fill="#aab4bc" text-anchor="middle" font-family="monospace">1</text>
+          <!-- 2: compressor -->
+          <circle cx="70" cy="58" r="22" stroke="#5c7d9c" stroke-width="2"/>
+          <text x="70" y="62" font-size="9" fill="#aab4bc" text-anchor="middle" font-family="monospace">A/C</text>
+          <circle cx="44" cy="34" r="10" stroke="#5c7d9c" stroke-width="1.5"/><text x="44" y="38" font-size="9" fill="#aab4bc" text-anchor="middle" font-family="monospace">2</text>
+          <!-- compressor bolts + torque -->
+          <line x1="88" y1="42" x2="112" y2="26" stroke="#5c7d9c" stroke-dasharray="3 3"/>
+          <rect x="112" y="18" width="10" height="6" fill="#5c7d9c"/><text x="128" y="25" font-size="10" fill="#f2a531" font-family="monospace">25 Nm</text>
+          <!-- 3: alternator (target, green like the reel) -->
+          <circle cx="158" cy="92" r="26" stroke="#43c785" stroke-width="3" fill="#12321f"/>
+          <text x="158" y="96" font-size="10" fill="#43c785" text-anchor="middle" font-family="monospace">ALT</text>
+          <circle cx="132" cy="66" r="10" stroke="#43c785" stroke-width="1.5"/><text x="132" y="70" font-size="9" fill="#43c785" text-anchor="middle" font-family="monospace">3</text>
+          <!-- alternator bolts exploded with torques -->
+          <line x1="176" y1="74" x2="204" y2="52" stroke="#43c785" stroke-dasharray="3 3"/>
+          <rect x="204" y="45" width="10" height="6" fill="#43c785"/><text x="196" y="40" font-size="10" fill="#f2a531" font-family="monospace">45 Nm</text>
+          <line x1="176" y1="110" x2="204" y2="126" stroke="#43c785" stroke-dasharray="3 3"/>
+          <rect x="204" y="122" width="10" height="6" fill="#43c785"/><text x="218" y="130" font-size="10" fill="#f2a531" font-family="monospace">45 Nm</text>
         </svg>
       </div>
       <div class="rmlist">
-        <div class="rmitem"><div class="o">1</div><div><b>Desligar a bateria</b><span>segurança — polo negativo</span></div></div>
-        <div class="rmitem"><div class="o">2</div><div><b>Remover a correia do acessório</b><span>alivie o tensionador</span></div></div>
-        <div class="rmitem"><div class="o">3</div><div><b>Remover o compressor do A/C</b><span>desaparafusar e afastar (sem soltar o gás)</span></div></div>
-        <div class="rmitem target"><div class="o">★</div><div><b>Acessar e remover o alternador</b><span>solte o chicote e os 2 parafusos de fixação</span></div></div>
+        <div class="rmitem"><div class="o">0</div><div><b>Desligar a bateria</b><span>segurança — polo negativo</span></div></div>
+        <div class="rmitem"><div class="o">1</div><div><b>Remover a correia do acessório</b><span>alivie o tensionador</span></div></div>
+        <div class="rmitem"><div class="o">2</div><div><b>Remover o compressor do A/C</b><span>afastar sem soltar o gás · reaperto <b style="color:var(--amber)">25 Nm</b></span></div></div>
+        <div class="rmitem target"><div class="o">3</div><div><b>Remover o alternador</b><span>chicote + 2 parafusos · reaperto <b style="color:var(--amber)">45 Nm</b></span></div></div>
       </div>
-      <div class="searchnote">Ilustrativo. Toque na peça na vista explodida para ver o procedimento e um vídeo (na versão final).</div>
+      <div class="searchnote">Ilustrativo. Na versão final: peça destacada em verde, numerada, torque em cada fixação — e toque na peça abre o procedimento com vídeo.</div>
     </div>
 
     <!-- ===== MENTOR ===== -->
@@ -361,7 +375,7 @@
 </div>
 
 <div class="whatsnew">
-  <b>Novidades desta versão (v2), a partir do teste do mecânico:</b> ① o “não pega” agora vai <span class="amb">mais fundo</span> — teste de continuidade até o <span class="amb">pino 43</span> da central, separando chicote de driver da ECU; ② novo sintoma <span class="amb">“perde aceleração”</span> funcionando; ③ entrada por <span class="amb">texto livre / conversa</span> na busca; ④ dois módulos novos: <span class="amb">Consulta de peças</span> (medida + nº + foto) e <span class="amb">Vista explodida</span> (o que tirar para acessar a peça).
+  <b>Novidades desta versão (v2), a partir do teste do mecânico:</b> ① o “não pega” agora vai <span class="amb">mais fundo</span> — teste de continuidade até o <span class="amb">pino 43</span> da central, separando chicote de driver da ECU; ② novo sintoma <span class="amb">“perde aceleração”</span> funcionando; ③ entrada por <span class="amb">texto livre / conversa</span> na busca; ④ dois módulos novos: <span class="amb">Consulta de peças</span> (medida + nº + foto) e <span class="amb">Vista explodida</span> (o que tirar para acessar a peça); ⑤ vista explodida refinada com a referência do reel: peça-alvo em verde, itens numerados e <span class="amb">torque em cada fixação</span> direto no desenho.
 </div>
 
 <div class="foot-note">
